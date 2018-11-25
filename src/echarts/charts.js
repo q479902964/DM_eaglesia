@@ -685,9 +685,9 @@ class chartFactory extends ChartFatherFactory{
 		                    barBorderRadius: [190, 0, 0, 190],
 		                },
 		                emphasis:{
-		                    color:'#a0b9e5',
+		                    color:'#38b1d5',
 		                    borderWidth:"5", 
-		                    borderColor:'#a0b9e5',
+		                    borderColor:'#38b1d5',
 		                }
 		            },
 		            label: {      
@@ -712,9 +712,9 @@ class chartFactory extends ChartFatherFactory{
 		                    show: true,
 		                },
 		                emphasis:{
-		                    color:'#b0b0b0',
+		                    color:'#a3adc5',
 		                    borderWidth:"5", 
-		                    borderColor:'#b0b0b0',
+		                    borderColor:'#a3adc5',
 		                }
 		                
 		            },
@@ -741,9 +741,9 @@ class chartFactory extends ChartFatherFactory{
 		                    barBorderRadius: [0, 30, 30, 0],
 		                },
 		                emphasis:{
-		                    color:'#d68592',
+		                    color:'#f26078',
 		                    borderWidth:"5", 
-		                    borderColor:'#d68592',
+		                    borderColor:'#f26078',
 		                }
 		                
 		            },

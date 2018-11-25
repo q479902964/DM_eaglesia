@@ -4,6 +4,7 @@ import { NavLink, Switch, Route, Redirect } from 'react-router-dom'
 import PublicHeader from '@/components/header/header'
 import Report from "@/components/report/report"
 import HotEvent from "@/components/hotevent/hotevent"
+import PublicFooter from '@/components/footer/footer';
 
 import './found.less'
 
@@ -46,6 +47,7 @@ class Found extends Component {
 						</Switch>
 					</div>
 				</div>
+                <PublicFooter></PublicFooter>
 			</div>
 		);
 	}

@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 import Api from '@/api/api.js'
 
 import PublicHeader from '@/components/header/header';
+import PublicFooter from '@/components/footer/footer';
 
 import './home.less';
 
@@ -80,7 +81,9 @@ class Home extends Component {
 						</div>
 					</div>
 				</div>
+                <PublicFooter status="2"></PublicFooter>
 			</div>
+
 		);
 	}
 }
