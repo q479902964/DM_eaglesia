@@ -1,0 +1,56 @@
+.chooser{
+  cursor: pointer;
+  position: relative;
+  width:158px;
+  height: 30px;
+  background: #fff;
+  border: 1px solid rgb(112,155,168);
+  padding-left: 15px;
+  line-height: 30px;
+  font-size: 16px;
+  border-radius: 5px;
+  .year,.month{
+    color:rgb(112,155,168) ;
+  }
+  img{
+    float: right;
+    padding-top: 10px;
+    padding-right: 10px;
+  }
+  .year_box,.month_box {
+    left: 0;
+    position: absolute;
+    width: 173px;
+    max-height:100px;
+    background: #5a5a5a;
+    overflow: auto;
+    z-index: 1000;
+    li{
+      height: 33px;
+      padding-left: 15px;
+      color: #fff;
+      font-size: 16px;
+      line-height: 33px;
+    }
+    li:hover{
+      background: #38b1d5;
+    }
+    .active{
+      background: #38b1d5;
+    }
+  }
+  .hidden{
+    display: none;
+  }
+}
+.chooser:hover{
+  border: 1px solid #38b1d5;
+  .year,.month{
+    color:#38b1d5 ;
+  }
+}
+.chooser{
+  ::-webkit-scrollbar{
+    display: none;
+  }
+}

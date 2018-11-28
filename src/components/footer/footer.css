@@ -12,11 +12,13 @@
     }
  }
 .footer1{
+    padding-top: 50px;
     width: 100%;
     text-align: center;
     background: transparent;
-    position: absolute;
-    bottom:0;
+    /*position: absolute;*/
+    /*bottom:0;*/
+    clear:both;
     line-height: 40px;
     height:40px;
     font-size: 16px;

@@ -5,8 +5,8 @@ import charts from '@/echarts/charts.js'
 import api from '@/api/api.js'
 
 import EventItem from "@/components/event_item/event_item"
-
-import './report.css'
+import Chooser from "@/components/chooser/chooser"
+import './report.less'
 
 class Report extends Component {
 	state = {
@@ -42,26 +42,17 @@ class Report extends Component {
 		}
 	}
 
-	nextMonth = () => {
-		let finalIndex = this.state.month.length-1
-		if(this.state.targetMonth<this.state.month[finalIndex]){
-			this.setState({
-				targetMonth:this.state.targetMonth+1
-			})
-		}else{
-			alert("没有上一月了");
-		}
+    changeYear = (val)=>{
+		this.setState({
+            targetYear:val
+		})
 	}
 
-	lastMonth = () => {
-		if(this.state.targetMonth>this.state.month[0]){
-			this.setState({
-				targetMonth:this.state.targetMonth-1
-			})
-		}else{
-			alert("已经是最后一月了");
-		}
-	}
+    changeMonth= (val)=>{
+        this.setState({
+            targetMonth:val
+        })
+    }
 
 	check = () => {
 		this.state.currentYear = this.state.targetYear,
@@ -163,51 +154,47 @@ class Report extends Component {
 	render(){
 		return (
 			<div id="report">
-				<div className="time_choose">
-					<div className="chooser_box">
-						<div className="chooser">
-							<img src="./img/last.png" alt="" onClick={this.lastYear}/>
-							<input type="text" value={this.state.targetYear} readOnly/>
-							<img src="./img/next.png" alt="" onClick={this.nextYear}/>
+				<div className="wrapper">
+					<div className="time_choose">
+						<button className="check" onClick={this.check}>查看</button>
+						<div className={this.props.match.params.type==="year" ? "hidden" : "chooser_box"}>
+							<Chooser status="month" oncurrentMonth={this.changeMonth.bind(this)} currentMonth={this.state.currentMonth}/>
 						</div>
-						<span>年</span>
-					</div>
-					<div className={this.props.match.params.type==="year" ? "hidden" : "chooser_box"}>
-						<div className="chooser">
-							<img src="./img/last.png" alt="" onClick={this.lastMonth}/>
-							<input type="text" value={this.state.targetMonth} readOnly/>
-							<img src="./img/next.png" alt="" onClick={this.nextMonth}/>
+						<div className="chooser_box">
+							<Chooser status="year" oncurrentYear={this.changeYear.bind(this)} currentYear={this.state.currentYear}/>
 						</div>
-						<span>月</span>
+						{
+							this.props.match.params.type==="year" ?
+							<div className="time_choose_title">{this.state.currentYear+"年舆情报表"}</div> :
+							<div className="time_choose_title">{this.state.currentYear+"年"+this.state.currentMonth+"月舆情报表"}</div>
+						}
 					</div>
-					<button className="check" onClick={this.check}>查看</button>
-					{
-						this.props.match.params.type==="year" ?
-						<div className="time_choose_title">{this.state.currentYear+"年舆情报表"}</div> :
-						<div className="time_choose_title">{this.state.currentYear+"年"+this.state.currentMonth+"月舆情报表"}</div>
-					}
-				</div>
-				<div className="report_title">{this.props.match.params.type==="year" ? "年度热点事件" : "月度热点事件"}</div>
-				{
-					this.state.events.map((item,index) => {
-						// return <div></div>
-						return (<EventItem itemData={item} key={index}></EventItem>)
-					})
-				}
-				<div className="keyword">
-					<div className="keyword_title">{this.props.match.params.type==="year" ? "年度热门关键词与话题" : "月度热门关键词与话题"}</div>
+					<div className="report_title">{this.props.match.params.type==="year" ? "年度热点事件" : "月度热点事件"}</div>
 					{
 						this.state.events.map((item,index) => {
-							return (
-								<div className="graph_chart graph_chart1" ref={"graph_chart"+index} key={index}></div>
-							)
+							// return <div></div>
+							return (<EventItem itemData={item} key={index}></EventItem>)
 						})
 					}
-				</div>
-				<div className="emotion_trend">
-					<div className="top">{this.props.match.params.type==="year" ? "年度情感趋势" : "月度情感趋势"}</div>
-					<div className="emotion_trend_chart" ref="emotion_trend_chart"></div>
-				</div>
+                </div>
+                <div className="keyword">
+                    <div className="keyword_title">{this.props.match.params.type==="year" ? "年度热门关键词与话题" : "月度热门关键词与话题"}</div>
+                    {
+                        this.state.events.map((item,index) => {
+                            return (
+                                <div className="graph_chart graph_chart1" ref={"graph_chart"+index} key={index}></div>
+                            )
+                        })
+                    }
+                </div>
+                <div className="emotion_trend">
+                    <div className="top">{this.props.match.params.type==="year" ? "年度情感趋势" : "月度情感趋势"}</div>
+                    <div className="emotion_trend_chart" ref="emotion_trend_chart"></div>
+                </div>
+                <div className="ranking_list">
+                    <h5 className="module_title">年度媒体对华关注排行榜</h5>
+                    <div className="keywords_chart_box" ref="keywords_chart_box"></div>
+                </div>
 			</div>
 		)
 	}

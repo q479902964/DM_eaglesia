@@ -4,6 +4,7 @@ import { NavLink, Switch, Route, Redirect } from 'react-router-dom'
 import PublicHeader from '@/components/header/header'
 import HotNews from "@/components/hotnews/hotnews"
 import PublicRank from '@/components/rank/rank'
+import PublicFooter from '@/components/footer/footer';
 
 import api from "@/api/api.js"
 
@@ -70,7 +71,7 @@ class NewsDomain extends Component {
 						</div>
 					</div>
 				</div>
-				
+				<PublicFooter/>
 			</div>
 		);
 	}
