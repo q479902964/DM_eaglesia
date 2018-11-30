@@ -34,7 +34,7 @@ class Header extends Component {
 
 	render(){
 		let changelanguage = <div className="changelanguage">
-								<div className="currentLanguage">{this.state.languageMap[this.props.language]}</div>
+			<div className="currentLanguage"><span>{this.state.languageMap[this.props.language]}</span><img src="./img/expend.png"/></div>
 								<ul>
 									{
 										this.state.language.map((item) => {
@@ -74,10 +74,6 @@ class Header extends Component {
 						</ul>
 					</div>
 					{
-						// console.log(window.location.hash)
-						window.location.hash.split('/')[1] == "news" ?	changelanguage : ""
-					}
-					{
 						this.props.status === 1 
 						? (
 							<div className="searchbox">
@@ -92,7 +88,10 @@ class Header extends Component {
 						)
 						: (<div></div>)
 					}
-					
+                    {
+                        // console.log(window.location.hash)
+                        window.location.hash.split('/')[1] == "news" ?	changelanguage : ""
+                    }
 				</div>
 			</div>
 		)

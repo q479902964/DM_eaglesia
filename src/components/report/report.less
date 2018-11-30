@@ -115,6 +115,52 @@
 			color: #474e59;
 			border-bottom: 1px solid #b0b0b0;
 		}
+        .ranking_box{
+          padding-left: 15px;
+          padding-right: 15px;
+          li:first-of-type{
+            padding-left: 15px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            font-size: 20px;
+            span{
+              display: inline-block;
+              width: 300px;
+              height: 100%;
+            }
+          }
+          li:not(:first-of-type){
+            position: relative;
+            padding-left: 15px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            font-size: 20px;
+            border-top: 1px solid rgb(189,189,189);
+            color: rgb(86,92,102);
+            span{
+              display: inline-block;
+            }
+            span:first-of-type{
+              text-align: left;
+              width: 165px;
+            }
+            span:not(:first-of-type){
+              text-align: center;
+              width: 310px;
+            }
+            span:last-of-type{
+              width: 160px;
+              height: 32px;
+              background:#38b1d5;
+              border-radius: 5px;
+              line-height: 32px;
+              color: #fff;
+              font-size: 16px;
+              margin-left: 20px;
+              cursor: pointer;
+            }
+          }
+        }
 	}
 	.hidden{
 		display: none;

@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 import Api from '@/api/api.js'
 
 import PublicHeader from '@/components/header/header';
+import PublicFooter from '@/components/footer/footer';
 
 import './information.less';
 
@@ -12,6 +13,7 @@ class Information extends Component{
         return (
             <div className="information">
                 <PublicHeader/>
+                <PublicFooter/>
             </div>
         )
     }

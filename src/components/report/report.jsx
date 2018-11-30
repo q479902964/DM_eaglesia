@@ -193,7 +193,13 @@ class Report extends Component {
                 </div>
                 <div className="ranking_list">
                     <h5 className="module_title">年度媒体对华关注排行榜</h5>
-                    <div className="keywords_chart_box" ref="keywords_chart_box"></div>
+                    <div className="ranking_box">
+						<ul>
+							<li><span>排名</span><span>媒体</span><span>报道量</span></li>
+                            <li><span>No.1</span><span>环球时报</span><span>186</span><span>查看报道关键词</span></li>
+                            <li><span>No.2</span><span>环球时</span><span>186</span><span>查看报道关键词</span></li>
+						</ul>
+					</div>
                 </div>
 			</div>
 		)
