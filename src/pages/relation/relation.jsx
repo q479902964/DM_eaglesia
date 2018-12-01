@@ -21,6 +21,8 @@ class Relation extends Component{
         charts.relationGraph(relation_chart_box,"");
     }
 
+
+
     render(){
         return (
             <div className="relation">
