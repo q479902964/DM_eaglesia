@@ -7,4 +7,18 @@ export const changeLan = (language) => {
     }
 }
 
+export const changeID = (id) => {
+    return {
+        type: actionType.CHANGEID,
+        id
+    }
+}
+
+export const changeKey = (keyword) => {
+    return {
+        type: actionType.CHANGEKEYWORD,
+        keyword
+    }
+}
+
 export default {}

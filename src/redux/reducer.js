@@ -11,6 +11,16 @@ const reducer = (state = defaultState, action = {}) => {
                 ...state,
                 language:action.language
             }
+        case actionType.CHANGEID:
+            return {
+                ...state,
+                id:action.id
+            }
+        case actionType.CHANGEKEYWORD:
+            return {
+                ...state,
+                keyword:action.keyword
+            }
         default:
             return state
     }
