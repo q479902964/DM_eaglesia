@@ -24,7 +24,6 @@ class Enterprise extends Component{
         let keyword = this.props.keyword||this.props.match.params.keyword
         console.log(this.props)
         if(id==1){
-            alert("fuck1")
             this.props.changeID(2);
             this.props.changeKeyword(item);
             this.props.history.push("/information/region/2/"+item);
@@ -34,7 +33,7 @@ class Enterprise extends Component{
             this.props.history.push("/information/region/2/"+item);
         }
         else {
-            this.props.history.push("/information/searchCompany/"+item+"/"+keyword);
+            this.props.history.push("/information/searchCompany/"+item+"/"+keyword+"/1");
         }
     }
 

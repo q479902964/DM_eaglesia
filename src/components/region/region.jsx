@@ -35,7 +35,7 @@ class Region extends Component{
             this.props.changeKeyword(item);
             this.props.history.push("/information/enterprise/product/3/"+item);
         }else{
-            this.props.history.push("/information/searchCompany/"+keyword+"/"+item);
+            this.props.history.push("/information/searchCompany/"+keyword+"/"+item+"/1");
         }
     }
 
