@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import ReactDOM from "react-dom"
+
+
+import Api from '@/api/api.js'
+import charts from '@/echarts/charts.js'
+
 import './company.less'
 
 
@@ -39,9 +44,28 @@ class Company extends Component{
 
     render(){
         var pageNum = () => {
+            var pageStart,pageEnd,maxPage;
+            maxPage = this.state.pageNum;
+            if(maxPage>1){
+                pageStart = this.state.currentPage - 5;
+                if(pageStart<1){
+                    pageStart = 1;
+                }
+                // 最大页码
+                pageEnd = pageStart + 9;
+                if(pageEnd > maxPage) {
+                    // 最后一个页码不能大于总页数
+                    pageEnd = maxPage;
+                }
+                // 修正begin 的值, 理论上 begin 是 end - 9
+                pageStart = pageEnd - 9;
+                if(pageStart < 1) { // 第一个页码 不能小于1
+                    pageStart = 1;
+                }
+            }
             var res = [];
-            for(var i = 0; i < this.state.pageNum; i++) {
-                res.push(<span className={"page "+(this.state.currentPage==i+1?"now_page":"")}   ref={"page"+(i+1)} onClick={this.changePage.bind(this,i+1)}>{i+1}</span>)
+            for(var i = pageStart; i <= pageEnd; i++) {
+                res.push(<span className={"page "+(this.state.currentPage==i?"now_page":"")}   ref={"page"+i} onClick={this.changePage.bind(this,i)}>{i}</span>)
             }
             return res
         }
@@ -92,9 +116,9 @@ class Company extends Component{
                     </li>
                 </ul>
                 <div className="page_line">
-                    <span className="cbtn last_btn">上一页</span>
+                    <span className={this.state.currentPage==1?"hidden":"cbtn last_btn"}>上一页</span>
                     {pageNum()}
-                    <span className="cbtn next_btn">下一页</span>
+                    <span className={this.state.currentPage==this.state.pageNum?"hidden":"cbtn next_btn"}>下一页</span>
                 </div>
             </div>
         )

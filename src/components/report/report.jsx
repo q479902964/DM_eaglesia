@@ -19,6 +19,7 @@ class Report extends Component {
 		targetYear:new Date().getFullYear()-1,
 		// 判断当前报表状态，可以是year，可以是month
 		status:"year",
+		keywords:[]
 	}
 	
 	nextYear = () => {
@@ -138,6 +139,9 @@ class Report extends Component {
 	
 	initData = async () => {
 		this.fetchData();
+        // 全局关键词
+        var keywords_chart_box = ReactDOM.findDOMNode(this.refs.keywords_chart_box);
+        charts.createKeywordChart(keywords_chart_box,this.state.keywords);
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -199,6 +203,7 @@ class Report extends Component {
                             <li><span>No.1</span><span>环球时报</span><span>186</span><span>查看报道关键词</span></li>
                             <li><span>No.2</span><span>环球时</span><span>186</span><span>查看报道关键词</span></li>
 						</ul>
+						<div className="keywords_chart_box" ref="keywords_chart_box"></div>
 					</div>
                 </div>
 			</div>
