@@ -6,12 +6,24 @@ import charts from '@/echarts/charts.js'
 
 import PublicHeader from '@/components/header/header'
 import PublicDetail from '@/components/detail/detail'
+import Chooser from '@/components/chooser/chooser'
 
 import './event.less';
 
 class Event extends Component {
 
 	state = {
+        emotion_ALL:{},
+        emotion_INA:{},
+        emotion_PHI:{},
+        emotion_SG:{},
+        trend_ALL:[],
+        trend_INA:[],
+        trend_PHI:[],
+        trend_SG:[],
+        nodes:[],
+        links:[],
+
 		"title":"",
 		"info":"",
 		"rank":{
@@ -45,17 +57,20 @@ class Event extends Component {
 			{key:"spe_emotion",value:"评价对象",scroll:850},
 			{key:"trend_attitude",value:"态度趋势",scroll:1305},
 			{key:"trend_value",value:"热度趋势",scroll:1805},
-			{key:"comments",value:"印尼国民评论",scroll:2340},
-			{key:"keywords",value:"事件关键词",scroll:2915},
-			{key:"posWords",value:"正面高频词",scroll:2935},
-			{key:"negWords",value:"负面高频词",scroll:2955},
-			{key:"news",value:"印尼媒体相关报道",scroll:3320},
+            {key:"relation",value:"事件人物关系图",scroll:1985},
+			{key:"comments",value:"印尼国民评论",scroll:2405},
+			{key:"keywords",value:"事件关键词",scroll:3000},
+			{key:"posWords",value:"正面高频词",scroll:3020},
+			{key:"negWords",value:"负面高频词",scroll:3040},
+			{key:"news",value:"印尼媒体相关报道",scroll:3300}
 	    ],
 	    currentTag:"info",
 	    currentTagIndex:0,
 	    isShowDetial:false,
 	    newsPage:2,
-	    commentsPgae:2
+	    commentsPgae:2,
+    	proportion_currentMedia:"印度尼西亚",
+        trend_currentMedia:"印度尼西亚"
 	}
 
 	textFilter = (text,count) => {
@@ -115,7 +130,7 @@ class Event extends Component {
 		var tags = this.state.tags;
 		var tag = this.state.currentTag,index = cindex;
 		// 向下滚动
-		if(cindex<11&&scrollTop>tags[cindex+1].scroll){
+		if(cindex<12&&scrollTop>tags[cindex+1].scroll){
 			tag = tags[cindex+1].key;
 			index = cindex+1;
 		}
@@ -154,7 +169,7 @@ class Event extends Component {
 				newsPage:this.state.newsPage+1
 			})
 		}catch(err){
-			throw(err);
+			console.error(err)
 		}
 	}
 
@@ -179,7 +194,7 @@ class Event extends Component {
 				commentsPgae:this.state.commentsPgae+1
 			})
 		}catch(err){
-			throw(err);
+            console.error(err)
 		}
 	}
 
@@ -202,8 +217,9 @@ class Event extends Component {
 
 	initChart = () => {
 		// 态度比例
+
 		var emotion_chart_box =  ReactDOM.findDOMNode(this.refs.emotion_chart_box);
-		charts.createEmotionChart(emotion_chart_box,this.state.emotion)
+		charts.createEmotionChart(emotion_chart_box,this.state.emotion);
 		
 		
 		// 评价对象
@@ -243,6 +259,18 @@ class Event extends Component {
 			var negWords_chart_box = ReactDOM.findDOMNode(this.refs.negWords_chart_box);
 			charts.createNegwordsChart(negWords_chart_box,this.state.negWords);
 		}
+
+		//人物事件关系图
+
+		if(this.state.nodes){
+            var relation_chart_box = ReactDOM.findDOMNode(this.refs.relation_chart_box);
+            var data = {
+            	nodes:this.state.nodes,
+				links:this.state.links
+			}
+            charts.relationGraph(relation_chart_box,data);
+		}
+
 	}
 
 	hideDetail = (a) =>{
@@ -269,9 +297,9 @@ class Event extends Component {
 				"class": data.class,        
 				"total":data.total,                   
 				"track":data.track,
-			    "emotion":data.emotion,
+			    // "emotion":data.emotion,
 			    "spe_emotion":data.spe_emotion,
-			    "trend_attitude":data.trend_attitude,
+			    // "trend_attitude":data.trend_attitude,
 				"trend_value":data.trend_value,
 				"comments":data.comments,
 			    "keywords":data.keywords,
@@ -279,7 +307,22 @@ class Event extends Component {
 				"negWords":data.negWords,
 			    "news":data.news
 			})
+			var new_data = await this.fetchEmotion();
+			this.setState({
+                emotion_ALL:new_data.emotion_ALL,
+                emotion_INA:new_data.emotion_INA,
+                emotion_PHI:new_data.emotion_PHI,
+                emotion_SG:new_data.emotion_SG,
+                trend_ALL:new_data.trend_ALL,
+                trend_INA:new_data.trend_INA,
+                trend_PHI:new_data.trend_PHI,
+                trend_SG:new_data.trend_SG,
+                nodes:new_data.nodes,
+                links:new_data.links
+			})
 
+
+			this.judgeMedia();
 			this.initChart();
 
 			this.initTrackAnimate();
@@ -287,13 +330,81 @@ class Event extends Component {
 			console.error(err);
 		}
 	}
+
+    judgeMedia=()=>{
+		if(this.proportion_currentMedia=="总体"){
+			this.setState({
+				emotion:this.state.emotion_ALL
+			})
+		}else if(this.proportion_currentMedia=="印度尼西亚"){
+            this.setState({
+                emotion:this.state.emotion_INA
+            })
+		}else if(this.proportion_currentMedia=="菲律宾"){
+            this.setState({
+                emotion:this.state.emotion_PHI
+            })
+		}else if(this.proportion_currentMedia=="新加坡"){
+            this.setState({
+                emotion:this.state.emotion_SG
+            })
+		}
+
+        if(this.trend_currentMedia=="总体"){
+            this.setState({
+                trend_attitude:this.state.trend_ALL
+            })
+        }else if(this.trend_currentMedia=="印度尼西亚"){
+            this.setState({
+                trend_attitude:this.state.trend_INA
+            })
+        }else if(this.trend_currentMedia=="菲律宾"){
+            this.setState({
+                trend_attitude:this.state.trend_PHI
+            })
+        }else if(this.trend_currentMedia=="新加坡"){
+            this.setState({
+                trend_attitude:this.state.trend_SG
+            })
+        }
+
+	}
+
+	fetchEmotion= async()=>{
+		try{
+            let params = {
+                url:"/api/event/"+this.props.match.params.event_name
+            }
+			let result = await Api.getEmotionChart(params);
+			return result.data;
+		}catch (err){
+            console.error(err);
+		}
+	}
+
+    changeProportionMedia=(val)=>{
+        this.setState({
+            proportion_currentMedia:val
+        })
+		this.judgeMedia();
+	}
+
+    changeTrendMedia=(val)=>{
+        this.setState({
+            trend_currentMedia:val
+        })
+        this.judgeMedia();
+    }
+
+
+
 	
 	componentWillMount(){
 		
 	}
 
 	componentDidMount(){
-		this.initData();
+		// this.initData();
 		window.onscroll = this.showTag;
 	}
 
@@ -399,7 +510,10 @@ class Event extends Component {
 						</div>
 						<div className="emotion_spe_emotion_box">
 							<div className="emotion">
-								<h5 className="module_title">印媒对华情感倾向</h5>
+								<h5 className="module_title">
+									<span>态度比例</span>
+								</h5>
+								<Chooser className="Chooser" status="media" oncurrentMedia={this.changeProportionMedia.bind(this)}></Chooser>
 								<div className="chart_box" ref="emotion_chart_box">	
 									
 								</div>
@@ -414,12 +528,17 @@ class Event extends Component {
 							</div>
 						</div>
 						<div className="trend_attitude">
-							<h5 className="module_title">态度趋势</h5>
+							<h5 className="module_title">媒体对华情感倾向变化趋势</h5>
+							<Chooser class='chooser' status="media" oncurrentMedia={this.changeTrendMedia.bind(this)}/>
 							<div className="trend_attitude_chart_box" ref="trend_attitude_chart_box"></div>
 						</div>
 						<div className="trend_value">
 							<h5 className="module_title">热度趋势</h5>
 							<div className="trend_value_chart_box" ref="trend_value_chart_box"></div>
+						</div>
+						<div className="relation_graph">
+                            <h5 className="module_title">事件人物关系图</h5>
+                            <div className="relation_chart" ref="relation_chart_box"></div>
 						</div>
 						<div className="comments">
 							<h5 className="module_title comments_title">印尼国民评论</h5>

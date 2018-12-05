@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from "react-dom"
 
 
-import Api from '@/api/api.js'
+import api from '@/api/api.js'
 import charts from '@/echarts/charts.js'
 
 import './company.less'
@@ -11,18 +11,60 @@ import './company.less'
 class Company extends Component{
 
     state = {
-        product:this.props.match.params.product,
-        region:this.props.match.params.region,
-        pageNum:10,
-        currentPage:this.props.match.params.page
+        product:this.props.match.params.product?this.props.match.params.product:"",
+        region:this.props.match.params.region?this.props.match.params.region:"",
+        company:this.props.match.params.company?this.props.match.params.company:"",
+        pageNum:1,
+        currentPage:this.props.match.params.page?this.props.match.params.company:1,
+        information:[]
     }
 
     componentDidMount(){
         this.featch();
     }
 
-    featch = async ()=>{
+    featch = async (type=this.props.match.params.type)=>{
+        let result;
+        if(type==0){
+            result = await this.fetchProductType();
+        }else{
+            result = await this.fetchCompanyType();
+        }
+        let data = result.data;
 
+        this.setState({
+            pageNum:data.pageNum,
+            information:data.information
+        })
+    }
+
+    fetchCompanyType = async()=>{
+        try{
+            let params = {
+                company:this.state.company,
+                type:this.props.match.params.type,
+                currentPage:this.props.match.params.page||""
+            }
+            let result = api.getCompanyInfo();
+            return result;
+        }catch (err){
+            throw(err)
+        }
+    }
+
+    fetchProductType = async()=>{
+        try{
+            let params = {
+                product:this.state.product,
+                region:this.state.region,
+                type:this.props.match.params.type,
+                currentPage:this.props.match.params.page||""
+            }
+            let result = api.getCompanyInfo();
+            return result;
+        }catch (err){
+            throw(err)
+        }
     }
 
     componentWillReceiveProps(nextProps){
@@ -72,53 +114,31 @@ class Company extends Component{
         return (
             <div className="company">
                 <ul>
-                    <li>
-                        <div>
-                            <p className="englishName"><span className="tl">1. </span><span className="tl">公司名称：</span><span className="content t1">ALK SIM Cooked Fisn</span></p>
-                            <p className="content t2">伊森熟鱼公司</p>
-                        </div>
-                        <div>
-                            <span className="tl">国家或地区：</span>
-                            <span className="content area">Singapore</span>
-                        </div>
-                        <div>
-                            <span className="tl product_tl">产品与服务：</span><span className="content product_en">Lorem ipsum dolor sitd sddddddddddddddddddddddddddd</span>
-                            <p className="content product_cn">专营新鲜及冰冻鱼类产品</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <p className="englishName"><span className="tl">1. </span><span className="tl">公司名称：</span><span className="content t1">ALK SIM Cooked Fisn</span></p>
-                            <p className="content t2">伊森熟鱼公司</p>
-                        </div>
-                        <div>
-                            <span className="tl">国家或地区：</span>
-                            <span className="content area">Singapore</span>
-                        </div>
-                        <div>
-                            <span className="tl product_tl">产品与服务：</span><span className="content product_en">Lorem ipsum dolor sitd sddddddddddddddddddddddddddd</span>
-                            <p className="content product_cn">专营新鲜及冰冻鱼类产品</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <p className="englishName"><span className="tl">1. </span><span className="tl">公司名称：</span><span className="content t1">ALK SIM Cooked Fisn</span></p>
-                            <p className="content t2">伊森熟鱼公司</p>
-                        </div>
-                        <div>
-                            <span className="tl">国家或地区：</span>
-                            <span className="content area">Singapore</span>
-                        </div>
-                        <div>
-                            <span className="tl product_tl">产品与服务：</span><span className="content product_en">Lorem ipsum dolor sitd sddddddddddddddddddddddddddd</span>
-                            <p className="content product_cn">专营新鲜及冰冻鱼类产品</p>
-                        </div>
-                    </li>
+                    {
+                        this.state.company.map((item,index)=>{
+                            return(
+                                <li>
+                                    <div>
+                                        <p className="englishName"><span className="tl">{index+1}. </span><span className="tl">公司名称：</span><span className="content t1">{item.companyEnglichName}</span></p>
+                                        <p className="content t2">{item.companyChineseName}</p>
+                                    </div>
+                                    <div>
+                                        <span className="tl">国家或地区：</span>
+                                        <span className="content area">{item.region}</span>
+                                    </div>
+                                    <div>
+                                        <span className="tl product_tl">产品与服务：</span><span className="content product_en">{item.productEnglishName}</span>
+                                        <p className="content product_cn">{item.productChineseName}</p>
+                                    </div>
+                                </li>
+                            )
+                        })
+                    }
                 </ul>
                 <div className="page_line">
                     <span className={this.state.currentPage==1?"hidden":"cbtn last_btn"}>上一页</span>
                     {pageNum()}
-                    <span className={this.state.currentPage==this.state.pageNum?"hidden":"cbtn next_btn"}>下一页</span>
+                    <span className={this.state.currentPage==this.state.pageNum>1?"hidden":"cbtn next_btn"}>下一页</span>
                 </div>
             </div>
         )

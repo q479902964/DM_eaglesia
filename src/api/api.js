@@ -106,7 +106,7 @@ class Api extends Ajax{
 			let result = await this.axios("POST","/discover/field",parmas);
 			return result;
 		}catch(err){
-			throw(err);
+            console.error(err)
 		}
 	}
 
@@ -116,7 +116,7 @@ class Api extends Ajax{
 			let result = await this.axios("POST","/discover/media",parmas);
 			return result;
 		}catch(err){
-			throw(err);
+            console.error(err)
 		}
 	}
 	
@@ -126,9 +126,72 @@ class Api extends Ajax{
 			let result = await this.axios("POST","/discover/attitude",parmas);
 			return result;
 		}catch(err){
-			throw(err);
+            console.error(err)
 		}
 	}
+
+	//年度舆情报告页面--年度关键词和年度媒体对华排行榜报道关键词
+    async getYearKeywords(parmas ={}){
+        try{
+            let result = await this.axios("POST","/api/year_report",parmas);
+            return result;
+        }catch(err){
+            console.error(err)
+        }
+    }
+
+	//月度舆情报告页面--月度关键词和月度媒体对华排行榜报道关键词
+    async getMonthKeywords(parmas ={}){
+        try{
+            let result = await this.axios("POST","/api/month_report",parmas);
+            return result;
+        }catch(err){
+            console.error(err)
+        }
+    }
+
+    //关系图谱
+    async getRelationGraph(parmas = {}){
+        try{
+            let result = await this.axios("GET","/api/relationGraph",parmas);
+            return result;
+        }catch(err){
+            console.error(err)
+        }
+    }
+
+    //华商资讯获取页面信息
+    async getChooseInfo(parmas = {}){
+        try{
+            let result = await this.axios("GET","/api/companyInformation",parmas);
+            return result;
+        }catch(err){
+            console.error(err)
+        }
+    }
+
+    //华商资讯获取公司信息
+    async getCompanyInfo(parmas = {}){
+        try{
+            let result = await this.axios("GET","/api/companyInformation",parmas);
+            return result;
+        }catch(err){
+            console.error(err)
+        }
+    }
+
+    //舆情报表态度比例和媒体对华情感倾向变化趋势
+	async getEmotionChart(parmas = {}){
+        try{
+            let result = await this.axios("GET","/api/event",parmas);
+            return result;
+        }catch(err){
+            console.error(err)
+        }
+    }
+
+
+
 }
 
 export default new Api()

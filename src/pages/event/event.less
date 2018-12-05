@@ -230,6 +230,7 @@
 				width: 560px;
 				height: 938px;
 				.emotion{
+					position: relative;
 					width: 560px;
 					height: 526px;
 					.module;
@@ -237,6 +238,11 @@
 						margin-left: 38px;
 						margin-right: 30px;
 						height: 400px;
+					}
+					.chooser{
+						position: absolute;
+						top:25px;
+						left: 170px;
 					}
 				}
 				.spe_emotion{
@@ -255,12 +261,18 @@
 				}
 			}
 			.trend_attitude{
+				position: relative;
 				float: left;
 				width: 1203px;
 				height: 532px;
 				.module;
 				.trend_attitude_chart_box{
 					height: 420px;
+				}
+				.chooser{
+					position: absolute;
+					top:25px;
+					left: 410px;
 				}
 			}
 			.trend_value{
@@ -270,6 +282,15 @@
 				.module;
 				.trend_value_chart_box{
 					height: 388px;
+				}
+			}
+			.relation_graph{
+				float: left;
+				width: 1203px;
+				height: 445px;
+				.module;
+				.relation_chart{
+					height: 360px;
 				}
 			}
 			.comments{
@@ -386,7 +407,7 @@
 				height: 25px;
 				line-height: 25px;
 				font-size: 14px;
-				background-color: #b0b0b0;
+				background-color: #434343;
 				color: #f2f2f2;
 				text-align: center;
 				cursor: pointer;

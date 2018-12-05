@@ -19,7 +19,8 @@ class Report extends Component {
 		targetYear:new Date().getFullYear()-1,
 		// 判断当前报表状态，可以是year，可以是month
 		status:"year",
-		keywords:[]
+		rank_list:[],
+		date_keywords:[]
 	}
 	
 	nextYear = () => {
@@ -72,15 +73,18 @@ class Report extends Component {
 		
 		let emotion_trend_chart = ReactDOM.findDOMNode(this.refs["emotion_trend_chart"]);
 		charts.searchCreateEmotionChart(emotion_trend_chart,this.state.total_emotion);
-	
-		this.state.events.forEach((item,index) => {
-			let data = {
-				title:item.title,
-				keywords:item.keywords
+
+		var data = []
+		this.state.date_keywords.forEach((item,index) => {
+			let temp = {
+				value:item.value,
+				words:item.words
 			}
-			var graph_chart = ReactDOM.findDOMNode(this.refs["graph_chart"+index]);
-			charts.keywordGraph(graph_chart,data);
+			data.push(temp);
 		})
+
+        var graph_chart = ReactDOM.findDOMNode(this.refs["graph_chart"]);
+        charts.keywordGraph(graph_chart,data);
 		
 	}
 	
@@ -97,6 +101,37 @@ class Report extends Component {
 		}catch(err){
 			throw(err);
 		}
+	}
+
+	fetchYearKeywords = async()=>{
+        let params = {
+            data:{
+                year:this.state.currentYear
+            }
+        }
+
+        try{
+            let result = await api.getYearKeywords(params);
+            return result;
+        }catch(err){
+            throw(err);
+        }
+	}
+
+    fetchMonthKeywords = async()=>{
+        let params = {
+            data:{
+                year:this.state.currentYear,
+                month:this.state.currentMonth
+            }
+        }
+
+        try{
+            let result = await api.getMonthKeywords(params);
+            return result;
+        }catch(err){
+            throw(err);
+        }
 	}
 	
 	fetchMonthData = async () => {
@@ -119,17 +154,23 @@ class Report extends Component {
 	fetchData = async (type = this.props.match.params.type) => {
 		try{
 			let result;
+			let keyword_result;
 			if(type === "year"){
 				result = await this.fetchYearData();
+				keyword_result = await this.fetchYearKeywords()
 			}else{
 				result = await this.fetchMonthData();
+                keyword_result = await this.fetchMonthKeywords();
 			}
 			let data = result.data;
+			let keywords =keyword_result.data;
 			console.log(data);
+            console.log(keywords);
 			this.setState({
 				events:data.events,
-				keywords:data.keywords,
-				total_emotion:data.total_emotion
+				total_emotion:data.total_emotion,
+                rank_list:keywords.rankList,
+                date_keywords:keywords.keywords
 			})
 			this.initChart();
 		}catch(err){
@@ -139,10 +180,24 @@ class Report extends Component {
 	
 	initData = async () => {
 		this.fetchData();
-        // 全局关键词
-        var keywords_chart_box = ReactDOM.findDOMNode(this.refs.keywords_chart_box);
-        charts.createKeywordChart(keywords_chart_box,this.state.keywords);
+
 	}
+
+	//查看报道关键词
+    readKeywords(keywords){
+        var data = []
+        keywords.forEach((item,index) => {
+            let temp = {
+                value:item.value,
+                words:item.words
+            }
+            data.push(temp);
+        })
+
+        var keywords_chart_box = ReactDOM.findDOMNode(this.refs["keywords_chart_box"]);
+        charts.createKeywordChart(keywords_chart_box,data);
+	}
+
 
 	componentWillReceiveProps(nextProps){
 		if(this.props.match.params.type !== nextProps.match.params.type){
@@ -182,14 +237,17 @@ class Report extends Component {
 					}
                 </div>
                 <div className="keyword">
-                    <div className="keyword_title">{this.props.match.params.type==="year" ? "年度热门关键词与话题" : "月度热门关键词与话题"}</div>
-                    {
-                        this.state.events.map((item,index) => {
-                            return (
-                                <div className="graph_chart graph_chart1" ref={"graph_chart"+index} key={index}></div>
-                            )
-                        })
-                    }
+                    <div className="keyword_title">{this.props.match.params.type==="year" ? "年度热门关键词" : "月度热门关键词"}</div>
+                    {/*{*/}
+                        {/*this.state.events.map((item,index) => {*/}
+                            {/*return (*/}
+                                {/*<div className="graph_chart graph_chart1" ref={"graph_chart"+index} key={index}></div>*/}
+                            {/*)*/}
+                        {/*})*/}
+                    {/*}*/}
+					{
+						<div className="graph_chart" ref={"graph_chart"}></div>
+					}
                 </div>
                 <div className="emotion_trend">
                     <div className="top">{this.props.match.params.type==="year" ? "年度情感趋势" : "月度情感趋势"}</div>
@@ -200,10 +258,17 @@ class Report extends Component {
                     <div className="ranking_box">
 						<ul>
 							<li><span>排名</span><span>媒体</span><span>报道量</span></li>
-                            <li><span>No.1</span><span>环球时报</span><span>186</span><span>查看报道关键词</span></li>
-                            <li><span>No.2</span><span>环球时</span><span>186</span><span>查看报道关键词</span></li>
+                            {/*<li><span>No.1</span><span>环球时报</span><span>186</span><span>查看报道关键词</span></li>*/}
+                            {
+                                this.state.rank_list.map((item,index)=>{
+                                    return(
+                                        <li><span>No.{index+1}</span><span>{item.media}</span><span>{item.reportedVolume}</span><span onClick={this.readKeywords(this,item.reportKeyword)}>查看报道关键词</span></li>
+                                    )
+                                })
+                            }
 						</ul>
-						<div className="keywords_chart_box" ref="keywords_chart_box"></div>
+						<div className="keywords_chart_box" ref="keywords_chart_box">
+						</div>
 					</div>
                 </div>
 			</div>

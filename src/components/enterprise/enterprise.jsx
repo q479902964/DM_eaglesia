@@ -1,6 +1,6 @@
 import React,{ Component } from "react"
 import ReactDOM from "react-dom"
-
+import api from '@/api/api.js'
 
 import './enterprise.less'
 import {connect} from "react-redux";
@@ -11,12 +11,21 @@ import { changeKey } from "@/redux/action";
 class Enterprise extends Component{
 
     state = {
-        service_data:["农业机械","农业机械","农业机械","农业机械","农业机械","农业机械","农业机械","农业机械","农业机械","农业机械","农业机械","农业机械"],
-        product_data:["农业机械2","农业机械2","农业机械2","农业机械2","农业机械2","农业机械2","农业机械2","农业机械2","农业机械","农业机械","农业机械","农业机械"]
+        service_data:[],
+        product_data:[]
     }
 
     initData= async ()=>{
-
+        try{
+            let result = await api.getChooseInfo();
+            let data = result.data;
+            this.setState({
+                service_data:data.service,
+                product_data:data.product
+            })
+        }catch(err){
+            throw(err);
+        }
     }
 
     jumpArea (item){
@@ -33,7 +42,7 @@ class Enterprise extends Component{
             this.props.history.push("/information/region/2/"+item);
         }
         else {
-            this.props.history.push("/information/searchCompany/"+item+"/"+keyword+"/1");
+            this.props.history.push("/information/searchCompany/"+item+"/"+keyword+"/0/");
         }
     }
 

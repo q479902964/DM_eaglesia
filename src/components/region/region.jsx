@@ -4,6 +4,7 @@ import { NavLink, Switch, Route, Redirect } from 'react-router-dom'
 
 import { changeID } from '@/redux/action'
 import { changeKey } from "@/redux/action";
+import api from '@/api/api.js'
 
 import './region.less'
 import {connect} from "react-redux";
@@ -11,7 +12,7 @@ import {connect} from "react-redux";
 class Region extends Component{
 
     state = {
-        area:["中国","美国","英国","安达丽娅","日本","德国","塞尔维亚","印尼","新加坡","马来西亚"],
+        area:[],
         inputKeyword:""
     }
 
@@ -20,7 +21,15 @@ class Region extends Component{
     }
 
     initData = async ()=>{
-
+        try{
+            let result = await api.getChooseInfo();
+            let data  = result.data;
+            this.setState({
+                area:data.region
+            })
+        }catch(err){
+            throw(err);
+        }
     }
 
     jumpArea (item){
@@ -35,7 +44,7 @@ class Region extends Component{
             this.props.changeKeyword(item);
             this.props.history.push("/information/enterprise/product/3/"+item);
         }else{
-            this.props.history.push("/information/searchCompany/"+keyword+"/"+item+"/1");
+            this.props.history.push("/information/searchCompany/"+keyword+"/"+item+"/0/");
         }
     }
 

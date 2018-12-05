@@ -76,9 +76,9 @@ class Information extends Component{
                     <div className="searchbox">
                         <form action="">
                             <input type="text" placeholder="请输入公司名称进行搜索" onInput={this.inputKeyword}/>
-                            <Link to={`${this.props.match.path}/region/`+this.state.keyword}>
+                            <NavLink to={`${this.props.match.path}/searchCompany/${this.state.keyword}/1/`}>
                                 <button></button>
-                            </Link>
+                            </NavLink>
                             <img src="./img/search1.png" alt="" className="icon"/>
                         </form>
                     </div>
@@ -115,7 +115,8 @@ class Information extends Component{
                         <Switch>
                             <Route path={`${this.props.match.path}/enterprise/:type/:id/:keyword?`} component={Enterprise}></Route>
                             <Route path={`${this.props.match.path}/region/:id/:keyword?`} component={Region}></Route>
-                            <Route path={`${this.props.match.path}/searchCompany/:product/:region/:page`} component={Company}></Route>
+                            <Route path={`${this.props.match.path}/searchCompany/:product/:region/:type/:page`} component={Company}></Route>
+                            <Route path={`${this.props.match.path}/searchCompany/:company/:type/:page`} component={Company}></Route>
                             <Redirect from={`${this.props.match.path}`} to={`${this.props.match.path}/enterprise/product/${this.state.id}/${this.state.keyword}`} component={Enterprise}/>
                         </Switch>
                     </div>
