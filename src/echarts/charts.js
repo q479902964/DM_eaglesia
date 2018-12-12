@@ -8,7 +8,6 @@ class chartFactory extends ChartFatherFactory{
             {value:data.neu, name:'中立'},
             {value:data.neg, name:'反对'}
         ];
-        console.log(data1);
 		let option = {
 			color:['#38b1d5','#a3adc5', '#f26078'],
 		    tooltip: {
@@ -220,6 +219,7 @@ class chartFactory extends ChartFatherFactory{
 			neu.push(d.neu);
 			neg.push(d.neg);
 		})
+        console.log(data);
 		var option = {
 		    tooltip: {
 		        trigger: 'item'

@@ -190,7 +190,15 @@ class Api extends Ajax{
         }
     }
 
-
+	//搜索页面生成舆情报表
+    async buildReport(parmas = {}){
+        try{
+            let result = await this.axios("GET","/api/buildReport",parmas);
+            return result;
+        }catch(err){
+            console.error(err)
+        }
+    }
 
 }
 

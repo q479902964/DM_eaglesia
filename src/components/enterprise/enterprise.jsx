@@ -2,6 +2,8 @@ import React,{ Component } from "react"
 import ReactDOM from "react-dom"
 import api from '@/api/api.js'
 
+import test from '@/api/test.js'
+
 import './enterprise.less'
 import {connect} from "react-redux";
 
@@ -17,8 +19,9 @@ class Enterprise extends Component{
 
     initData= async ()=>{
         try{
-            let result = await api.getChooseInfo();
-            let data = result.data;
+            // let result = await api.getChooseInfo();
+            // let data = result.data;
+            let data = test.data1;
             this.setState({
                 service_data:data.service,
                 product_data:data.product

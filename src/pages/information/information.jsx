@@ -115,8 +115,8 @@ class Information extends Component{
                         <Switch>
                             <Route path={`${this.props.match.path}/enterprise/:type/:id/:keyword?`} component={Enterprise}></Route>
                             <Route path={`${this.props.match.path}/region/:id/:keyword?`} component={Region}></Route>
-                            <Route path={`${this.props.match.path}/searchCompany/:product/:region/:type/:page`} component={Company}></Route>
-                            <Route path={`${this.props.match.path}/searchCompany/:company/:type/:page`} component={Company}></Route>
+                            <Route path={`${this.props.match.path}/searchCompany/:product/:region/:type/:page?`} component={Company}></Route>
+                            <Route path={`${this.props.match.path}/searchCompany/:company/:type/:page?`} component={Company}></Route>
                             <Redirect from={`${this.props.match.path}`} to={`${this.props.match.path}/enterprise/product/${this.state.id}/${this.state.keyword}`} component={Enterprise}/>
                         </Switch>
                     </div>

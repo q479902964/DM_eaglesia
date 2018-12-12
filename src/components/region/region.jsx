@@ -5,6 +5,7 @@ import { NavLink, Switch, Route, Redirect } from 'react-router-dom'
 import { changeID } from '@/redux/action'
 import { changeKey } from "@/redux/action";
 import api from '@/api/api.js'
+import test from '@/api/test.js'
 
 import './region.less'
 import {connect} from "react-redux";
@@ -22,8 +23,9 @@ class Region extends Component{
 
     initData = async ()=>{
         try{
-            let result = await api.getChooseInfo();
-            let data  = result.data;
+            // let result = await api.getChooseInfo();
+            // let data  = result.data;
+            let data = test.data1;
             this.setState({
                 area:data.region
             })

@@ -78,13 +78,13 @@ class Report extends Component {
 		this.state.date_keywords.forEach((item,index) => {
 			let temp = {
 				value:item.value,
-				words:item.words
+				word:item.word
 			}
 			data.push(temp);
 		})
 
         var graph_chart = ReactDOM.findDOMNode(this.refs["graph_chart"]);
-        charts.keywordGraph(graph_chart,data);
+        charts.createKeywordChart(graph_chart,data);
 		
 	}
 	
@@ -184,16 +184,15 @@ class Report extends Component {
 	}
 
 	//查看报道关键词
-    readKeywords(keywords){
-        var data = []
-        keywords.forEach((item,index) => {
+    readKeywords=(keywords)=>{
+        var data = [];
+        keywords.forEach((item)=>{
             let temp = {
                 value:item.value,
-                words:item.words
+                word:item.word
             }
             data.push(temp);
-        })
-
+		})
         var keywords_chart_box = ReactDOM.findDOMNode(this.refs["keywords_chart_box"]);
         charts.createKeywordChart(keywords_chart_box,data);
 	}
@@ -262,7 +261,7 @@ class Report extends Component {
                             {
                                 this.state.rank_list.map((item,index)=>{
                                     return(
-                                        <li><span>No.{index+1}</span><span>{item.media}</span><span>{item.reportedVolume}</span><span onClick={this.readKeywords(this,item.reportKeyword)}>查看报道关键词</span></li>
+                                        <li><span>No.{index+1}</span><span>{item.media}</span><span>{item.reportedVolume}</span><span onClick={this.readKeywords.bind(this,item.reportKeyword)}>查看报道关键词</span></li>
                                     )
                                 })
                             }

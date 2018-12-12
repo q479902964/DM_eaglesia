@@ -3,6 +3,7 @@ import ReactDOM from "react-dom"
 
 
 import api from '@/api/api.js'
+import test from '@/api/test.js'
 import charts from '@/echarts/charts.js'
 
 import './company.less'
@@ -15,11 +16,13 @@ class Company extends Component{
         region:this.props.match.params.region?this.props.match.params.region:"",
         company:this.props.match.params.company?this.props.match.params.company:"",
         pageNum:1,
-        currentPage:this.props.match.params.page?this.props.match.params.company:1,
-        information:[]
+        currentPage:this.props.match.params.page?this.props.match.params.page:1,
+        information:[],
+        type:this.props.match.params.type
     }
 
     componentDidMount(){
+        console.log(this.props.match.params);
         this.featch();
     }
 
@@ -31,7 +34,6 @@ class Company extends Component{
             result = await this.fetchCompanyType();
         }
         let data = result.data;
-
         this.setState({
             pageNum:data.pageNum,
             information:data.information
@@ -42,7 +44,7 @@ class Company extends Component{
         try{
             let params = {
                 company:this.state.company,
-                type:this.props.match.params.type,
+                type:this.state.type,
                 currentPage:this.props.match.params.page||""
             }
             let result = api.getCompanyInfo();
@@ -57,7 +59,7 @@ class Company extends Component{
             let params = {
                 product:this.state.product,
                 region:this.state.region,
-                type:this.props.match.params.type,
+                type:this.state.type,
                 currentPage:this.props.match.params.page||""
             }
             let result = api.getCompanyInfo();
@@ -79,15 +81,53 @@ class Company extends Component{
 
 
     changePage(page){
-        let product = this.props.match.params.product;
-        let area = this.props.match.params.region;
-        this.props.history.push("/information/searchCompany/"+product+"/"+area+"/"+page);
+        let product = this.state.product;
+        let area = this.region;
+        this.props.history.push("/information/searchCompany/"+product+"/"+area+"/"+this.state.type+"/"+page);
     }
 
+    nextPage(){
+        if(this.state.type==0){
+            let product = this.state.product;
+            let area = this.region;
+            this.setState((preState)=>{
+                currentPage:preState.currentPage++
+            },()=>{
+                this.props.history.push("/information/searchCompany/"+product+"/"+area+"/"+this.state.type+"/"+this.state.currentPage);
+            })
+        }else{
+            let company = this.state.company;
+            this.setState((preState)=>{
+                currentPage:preState.currentPage++
+            },()=>{
+                this.props.history.push("/information/searchCompany/"+company+"/"+this.state.type+"/"+this.state.currentPage);
+            })
+        }
+    }
+
+    lastPage(){
+        if(this.state.type==0){
+            let product = this.state.product;
+            let area = this.region;
+            this.setState((preState)=>{
+                currentPage:preState.currentPage--
+            },()=>{
+                this.props.history.push("/information/searchCompany/"+product+"/"+area+"/"+this.state.type+"/"+this.state.currentPage);
+            })
+        }else{
+            let company = this.state.company;
+            this.setState((preState)=>{
+                currentPage:preState.currentPage--
+            },()=>{
+                this.props.history.push("/information/searchCompany/"+company+"/"+this.state.type+"/"+this.state.currentPage);
+            })
+        }
+    }
     render(){
         var pageNum = () => {
             var pageStart,pageEnd,maxPage;
             maxPage = this.state.pageNum;
+            console.log(this.props.match.params)
             if(maxPage>1){
                 pageStart = this.state.currentPage - 5;
                 if(pageStart<1){
@@ -115,11 +155,11 @@ class Company extends Component{
             <div className="company">
                 <ul>
                     {
-                        this.state.company.map((item,index)=>{
+                        this.state.information.map((item,index)=>{
                             return(
                                 <li>
                                     <div>
-                                        <p className="englishName"><span className="tl">{index+1}. </span><span className="tl">公司名称：</span><span className="content t1">{item.companyEnglichName}</span></p>
+                                        <p className="englishName"><span className="tl">{index+1}. </span><span className="tl">公司名称：</span><span className="content t1">{item.companyEnglishName}</span></p>
                                         <p className="content t2">{item.companyChineseName}</p>
                                     </div>
                                     <div>
@@ -136,9 +176,9 @@ class Company extends Component{
                     }
                 </ul>
                 <div className="page_line">
-                    <span className={this.state.currentPage==1?"hidden":"cbtn last_btn"}>上一页</span>
+                    <span className={this.state.currentPage==1?"hidden":"cbtn last_btn"} onClick={this.lastPage.bind(this)}>上一页</span>
                     {pageNum()}
-                    <span className={this.state.currentPage==this.state.pageNum>1?"hidden":"cbtn next_btn"}>下一页</span>
+                    <span className={this.state.currentPage==this.state.pageNum?"hidden":"cbtn next_btn" } onClick={this.nextPage.bind(this)}>下一页</span>
                 </div>
             </div>
         )

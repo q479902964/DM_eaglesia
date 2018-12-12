@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import Api from '@/api/api.js'
 import charts from '@/echarts/charts.js'
 
+
 import PublicHeader from '@/components/header/header'
 import PublicDetail from '@/components/detail/detail'
 import Chooser from '@/components/chooser/chooser'
@@ -12,15 +13,17 @@ import './event.less';
 
 class Event extends Component {
 
+
+
 	state = {
         emotion_ALL:{},
         emotion_INA:{},
         emotion_PHI:{},
-        emotion_SG:{},
+        emotion_MAS:{},
         trend_ALL:[],
         trend_INA:[],
         trend_PHI:[],
-        trend_SG:[],
+        trend_MAS:[],
         nodes:[],
         links:[],
 
@@ -69,8 +72,8 @@ class Event extends Component {
 	    isShowDetial:false,
 	    newsPage:2,
 	    commentsPgae:2,
-    	proportion_currentMedia:"印度尼西亚",
-        trend_currentMedia:"印度尼西亚"
+    	proportion_currentMedia:"印度尼西亚媒体",
+        trend_currentMedia:"印度尼西亚媒体"
 	}
 
 	textFilter = (text,count) => {
@@ -312,17 +315,16 @@ class Event extends Component {
                 emotion_ALL:new_data.emotion_ALL,
                 emotion_INA:new_data.emotion_INA,
                 emotion_PHI:new_data.emotion_PHI,
-                emotion_SG:new_data.emotion_SG,
+                emotion_MAS:new_data.emotion_MAS,
                 trend_ALL:new_data.trend_ALL,
                 trend_INA:new_data.trend_INA,
                 trend_PHI:new_data.trend_PHI,
-                trend_SG:new_data.trend_SG,
+                trend_MAS:new_data.trend_MAS,
+				emotion:new_data.emotion_INA,
+                trend_attitude:new_data.trend_INA,
                 nodes:new_data.nodes,
                 links:new_data.links
 			})
-
-
-			this.judgeMedia();
 			this.initChart();
 
 			this.initTrackAnimate();
@@ -331,43 +333,60 @@ class Event extends Component {
 		}
 	}
 
-    judgeMedia=()=>{
-		if(this.proportion_currentMedia=="总体"){
-			this.setState({
-				emotion:this.state.emotion_ALL
-			})
-		}else if(this.proportion_currentMedia=="印度尼西亚"){
-            this.setState({
-                emotion:this.state.emotion_INA
-            })
-		}else if(this.proportion_currentMedia=="菲律宾"){
-            this.setState({
-                emotion:this.state.emotion_PHI
-            })
-		}else if(this.proportion_currentMedia=="新加坡"){
-            this.setState({
-                emotion:this.state.emotion_SG
-            })
+    judgeMedia=(val)=>{
+		if(val==0){
+            if(this.state.proportion_currentMedia=="总体"){
+                this.setState({
+                    emotion:this.state.emotion_ALL
+                },()=>{
+                    this.initChart();
+                })
+            }else if(this.state.proportion_currentMedia=="印度尼西亚媒体"){
+                this.setState({
+                    emotion:this.state.emotion_INA
+                },()=>{
+                    this.initChart();
+                })
+            }else if(this.state.proportion_currentMedia=="菲律宾媒体"){
+                this.setState({
+                    emotion:this.state.emotion_PHI
+                },()=>{
+                    this.initChart();
+                })
+            }else if(this.state.proportion_currentMedia=="马来西亚媒体"){
+                this.setState({
+                    emotion:this.state.emotion_MAS
+                },()=>{
+                    this.initChart();
+                })
+            }
+		}else{
+            if(this.state.trend_currentMedia=="总体"){
+                this.setState({
+                    trend_attitude:this.state.trend_ALL
+                },()=>{
+                    this.initChart();
+                })
+            }else if(this.state.trend_currentMedia=="印度尼西亚媒体"){
+                this.setState({
+                    trend_attitude:this.state.trend_INA
+                },()=>{
+                    this.initChart();
+                })
+            }else if(this.state.trend_currentMedia=="菲律宾媒体"){
+                this.setState({
+                    trend_attitude:this.state.trend_PHI
+                },()=>{
+                    this.initChart();
+                })
+            }else if(this.state.trend_currentMedia=="马来西亚媒体"){
+                this.setState({
+                    trend_attitude:this.state.trend_MAS
+                },()=>{
+                    this.initChart();
+                })
 		}
-
-        if(this.trend_currentMedia=="总体"){
-            this.setState({
-                trend_attitude:this.state.trend_ALL
-            })
-        }else if(this.trend_currentMedia=="印度尼西亚"){
-            this.setState({
-                trend_attitude:this.state.trend_INA
-            })
-        }else if(this.trend_currentMedia=="菲律宾"){
-            this.setState({
-                trend_attitude:this.state.trend_PHI
-            })
-        }else if(this.trend_currentMedia=="新加坡"){
-            this.setState({
-                trend_attitude:this.state.trend_SG
-            })
         }
-
 	}
 
 	fetchEmotion= async()=>{
@@ -385,15 +404,20 @@ class Event extends Component {
     changeProportionMedia=(val)=>{
         this.setState({
             proportion_currentMedia:val
-        })
-		this.judgeMedia();
+        },()=>{
+            this.judgeMedia(0);
+		})
+
 	}
 
     changeTrendMedia=(val)=>{
+		console.log(val)
         this.setState({
             trend_currentMedia:val
-        })
-        this.judgeMedia();
+        },()=>{
+            this.judgeMedia(1);
+		})
+
     }
 
 
@@ -404,7 +428,7 @@ class Event extends Component {
 	}
 
 	componentDidMount(){
-		// this.initData();
+		this.initData();
 		window.onscroll = this.showTag;
 	}
 
