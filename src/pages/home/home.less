@@ -34,16 +34,15 @@
 			}
 		}
 		.main{
+			position: relative;
 			z-index: 2;
-			position: absolute;
-			top:50%;
-			left: 50%;
-			margin-top: -170px;
-			margin-left: -355px;
+			margin: 190px auto;
+			width: 1050px;
+			text-align: center;
 			.searchbox{
 				width: 584px;
 				height: 39px;
-				float: right;
+				margin: 0 auto;
 				background-color: rgba(44,44,44,1);
 				border:1px solid #fff;
 				opacity: 0.5;
@@ -83,10 +82,10 @@
 				text-align: center;
 			}
 			.events{
+				text-align: center;
 				.event_box{
-					float: left;
 					margin-top: 83px;
-					position: relative;
+					position: absolute;
 					//width:98px;
 					//height: 98px;
 					//background: rgba(0,0,0,0.2);
@@ -102,6 +101,11 @@
 						font-size: 22px;
 						color: #ffffff;
 						margin-left: 13px;
+						display: inline-block;
+						max-width: 140px;
+						overflow: hidden;
+						text-overflow:ellipsis;
+						white-space: nowrap;
 						//display: block;
 						//width:145px;
 						//text-align: center;
@@ -127,19 +131,19 @@
 				//	}
 				//}
 				.event1{
-					transform:translateX(0);
+					transform:translate(50px,0);
 				}
 				.event2{
-					transform:translateX(150px);
+					transform:translate(250px,66px);
 				}
 				.event3{
-					transform:translateX(300px);
+					transform:translateX(450px);
 				}
 				.event4{
-					transform:translate(-300px,66px);
+					transform:translate(650px,66px);
 				}
 				.event5{
-					transform:translate(-80px,66px);
+					transform:translateX(850px);
 				}
 				//.event5:hover{
 				//	transform: rotate(45deg) translate(-200px,100px) scale(1.1,1.1);

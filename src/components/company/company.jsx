@@ -127,7 +127,6 @@ class Company extends Component{
         var pageNum = () => {
             var pageStart,pageEnd,maxPage;
             maxPage = this.state.pageNum;
-            console.log(this.props.match.params)
             if(maxPage>1){
                 pageStart = this.state.currentPage - 5;
                 if(pageStart<1){

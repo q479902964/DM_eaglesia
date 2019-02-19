@@ -44,7 +44,8 @@ class Emotion_news extends Component {
 				newsPage:this.state.newsPage+1
 			})
 		}catch(err){
-			throw(err);
+			console.log(err);
+			// throw(err);
 		}
 	}
 
